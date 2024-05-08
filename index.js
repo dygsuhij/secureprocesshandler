@@ -1,10 +1,23 @@
-function coinChange(coins, amount) {
-  const dp = new Array(amount + 1).fill(Infinity);
-  dp[0] = 0;
-  for (const coin of coins) {
-    for (let i = coin; i <= amount; i++) {
-      dp[i] = Math.min(dp[i], dp[i - coin] + 1);
+function zigzagLevelOrder(root) {
+  if (!root) return [];
+  const result = [];
+  let isReverse = false;
+  const queue = [root];
+  while (queue.length) {
+    const size = queue.length;
+    const level = [];
+    for (let i = 0; i < size; i++) {
+      const node = queue.shift();
+      if (isReverse) {
+        level.unshift(node.val);
+      } else {
+        level.push(node.val);
+      }
+      if (node.left) queue.push(node.left);
+      if (node.right) queue.push(node.right);
     }
+    result.push(level);
+    isReverse = !isReverse;
   }
-  return dp[amount] === Infinity ? -1 : dp[amount];
+  return result;
 }
